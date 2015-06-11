@@ -1,0 +1,17 @@
+bin
+obj
+Properties
+.svn
+System Volume Information
+$RECYCLE.BIN
+$360Section
+Windows NT
+Application Data
+Cookies
+Local Settings
+My Documents
+NetHood
+.nuget
+ORM
+Message
+Dapper

@@ -1,0 +1,7 @@
+.agent.db
+.build.info
+.gitattributes
+.hgignore
+.hgignore
+.hgtags
+.patch.result
