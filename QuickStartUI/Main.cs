@@ -279,6 +279,13 @@ namespace QuickStartUI
         {
             var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
 
+            lock (lockObj)
+            {
+                cachedFiles.RemoveAll(p => p.FilePath == selectedFile);
+            }
+
+            txtSearch_TextChanged(null, null);
+
             FileFilter.AddFileIgnore(selectedFile);
         }
 
@@ -287,6 +294,8 @@ namespace QuickStartUI
             var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
 
             FileFilter.AddTypeIgnore(selectedFile);
+
+            RefreshHistory();
         }
 
         private void tsmiRefresh_Click(object sender, EventArgs e)

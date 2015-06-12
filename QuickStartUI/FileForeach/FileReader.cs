@@ -12,10 +12,11 @@ namespace QuickStartUI
 
         public static List<String> ReadFiles()
         {
+            FileForeachHelper.Init();
+
             var folders = GetFolders().OrderByDescending(p => p.Split('\\').Length).ThenByDescending(q => q.Length);
 
             List<String> files = new List<String>();
-
             foreach (var item in folders)
             {
                 files.AddRange(FileForeachHelper.GetAllFiles(item));
