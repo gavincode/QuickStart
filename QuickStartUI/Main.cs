@@ -67,6 +67,8 @@ namespace QuickStartUI
                     cachedFiles = fileInfos;
                 }
 
+                InvokeMethod(() => txtSearch_TextChanged(null, null));
+
                 FileHistory.Write(files);
             });
         }
@@ -180,7 +182,7 @@ namespace QuickStartUI
 
             if (e.Modifiers == Keys.Alt && e.KeyCode == Keys.R)
             {
-                tsmiRebot_Click(null, null);
+                tsmiRefresh_Click(null, null);
                 return;
             }
 
@@ -218,7 +220,7 @@ namespace QuickStartUI
         {
             String search = txtSearch.Text.Trim().ToLower();
 
-            if (String.IsNullOrEmpty(search))
+            if (String.IsNullOrEmpty(search) || search.StartsWith("请输入需要启动文件的关键字"))
             {
                 BindGridView(cachedFiles.OrderByDescending(q => q.Crdate));
             }
@@ -287,11 +289,9 @@ namespace QuickStartUI
             FileFilter.AddTypeIgnore(selectedFile);
         }
 
-        private void tsmiRebot_Click(object sender, EventArgs e)
+        private void tsmiRefresh_Click(object sender, EventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(p => OpenFile(Assembly.GetExecutingAssembly().Location));
-
-            Application.Exit();
+            RefreshHistory();
         }
 
         private void tsmiOpen_Click(object sender, EventArgs e)
@@ -314,7 +314,7 @@ namespace QuickStartUI
                 this.dataGridView.DataSource = dataSource.ToList();
             }
 
-            this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键:  " + ShowHotKeys + "   关闭:[Alt + E]    打开目录:[Alt + O]";
+            this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
 
             //dataGridView
             this.dataGridView.Columns[0].FillWeight = 20;

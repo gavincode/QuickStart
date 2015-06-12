@@ -112,6 +112,14 @@ namespace QuickStartUI
             return fileList;
         }
 
+        /// <summary>
+        /// 清空历史路径
+        /// </summary>
+        public static void ClearHistory()
+        {
+            fnFolders.Clear();
+        }
+
         #endregion
 
         #region 私有方法

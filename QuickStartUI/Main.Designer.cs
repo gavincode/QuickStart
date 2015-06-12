@@ -38,7 +38,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiRebot = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -75,7 +75,7 @@
             this.toolStripSeparator2,
             this.tsmiOpen,
             this.toolStripSeparator3,
-            this.tsmiRebot});
+            this.tsmiRefresh});
             this.cmsGridView.Name = "cmsGridView";
             this.cmsGridView.ShowImageMargin = false;
             this.cmsGridView.Size = new System.Drawing.Size(128, 132);
@@ -83,26 +83,26 @@
             // tsmiIngoreFile
             // 
             this.tsmiIngoreFile.Name = "tsmiIngoreFile";
-            this.tsmiIngoreFile.Size = new System.Drawing.Size(140, 22);
+            this.tsmiIngoreFile.Size = new System.Drawing.Size(127, 22);
             this.tsmiIngoreFile.Text = "     忽略文件";
             this.tsmiIngoreFile.Click += new System.EventHandler(this.tsmiIngoreFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(137, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(124, 6);
             // 
             // tsmiIgnoreType
             // 
             this.tsmiIgnoreType.Name = "tsmiIgnoreType";
-            this.tsmiIgnoreType.Size = new System.Drawing.Size(140, 22);
+            this.tsmiIgnoreType.Size = new System.Drawing.Size(127, 22);
             this.tsmiIgnoreType.Text = "     忽略类型";
             this.tsmiIgnoreType.Click += new System.EventHandler(this.tsmiIgnoreType_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(137, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(124, 6);
             // 
             // tsmiOpen
             // 
@@ -115,14 +115,14 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(137, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(124, 6);
             // 
-            // tsmiRebot
+            // tsmiRefresh
             // 
-            this.tsmiRebot.Name = "tsmiRebot";
-            this.tsmiRebot.Size = new System.Drawing.Size(127, 22);
-            this.tsmiRebot.Text = "     重新启动";
-            this.tsmiRebot.Click += new System.EventHandler(this.tsmiRebot_Click);
+            this.tsmiRefresh.Name = "tsmiRefresh";
+            this.tsmiRefresh.Size = new System.Drawing.Size(127, 22);
+            this.tsmiRefresh.Text = "     刷新文件";
+            this.tsmiRefresh.Click += new System.EventHandler(this.tsmiRefresh_Click);
             // 
             // txtSearch
             // 
@@ -186,7 +186,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiIngoreFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem tsmiRebot;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRefresh;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }

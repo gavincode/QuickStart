@@ -21,6 +21,8 @@ namespace QuickStartUI
                 files.AddRange(FileForeachHelper.GetAllFiles(item));
             }
 
+            FileForeachHelper.ClearHistory();
+
             return files;
         }
 
