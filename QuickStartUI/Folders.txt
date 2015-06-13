@@ -14,3 +14,4 @@ D:\开发文档\Excels
 D:\工作文档
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha\WebSite
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha\WebSite\Log
+C:\Users\Administrator\Desktop
