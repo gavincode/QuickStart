@@ -444,5 +444,10 @@ namespace QuickStartUI
         }
 
         #endregion
+
+        private void txtSearch_DoubleClick(object sender, EventArgs e)
+        {
+            InitText();
+        }
     }
 }

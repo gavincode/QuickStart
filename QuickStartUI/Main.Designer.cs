@@ -78,49 +78,49 @@
             this.tsmiRefresh});
             this.cmsGridView.Name = "cmsGridView";
             this.cmsGridView.ShowImageMargin = false;
-            this.cmsGridView.Size = new System.Drawing.Size(128, 132);
+            this.cmsGridView.Size = new System.Drawing.Size(120, 110);
             // 
             // tsmiIngoreFile
             // 
             this.tsmiIngoreFile.Name = "tsmiIngoreFile";
-            this.tsmiIngoreFile.Size = new System.Drawing.Size(127, 22);
+            this.tsmiIngoreFile.Size = new System.Drawing.Size(119, 22);
             this.tsmiIngoreFile.Text = "     忽略文件";
             this.tsmiIngoreFile.Click += new System.EventHandler(this.tsmiIngoreFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(116, 6);
             // 
             // tsmiIgnoreType
             // 
             this.tsmiIgnoreType.Name = "tsmiIgnoreType";
-            this.tsmiIgnoreType.Size = new System.Drawing.Size(127, 22);
+            this.tsmiIgnoreType.Size = new System.Drawing.Size(119, 22);
             this.tsmiIgnoreType.Text = "     忽略类型";
             this.tsmiIgnoreType.Click += new System.EventHandler(this.tsmiIgnoreType_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(116, 6);
             // 
             // tsmiOpen
             // 
             this.tsmiOpen.Name = "tsmiOpen";
             this.tsmiOpen.ShortcutKeyDisplayString = "";
-            this.tsmiOpen.Size = new System.Drawing.Size(127, 22);
+            this.tsmiOpen.Size = new System.Drawing.Size(119, 22);
             this.tsmiOpen.Text = "     打开目录";
             this.tsmiOpen.Click += new System.EventHandler(this.tsmiOpen_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(124, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(116, 6);
             // 
             // tsmiRefresh
             // 
             this.tsmiRefresh.Name = "tsmiRefresh";
-            this.tsmiRefresh.Size = new System.Drawing.Size(127, 22);
+            this.tsmiRefresh.Size = new System.Drawing.Size(119, 22);
             this.tsmiRefresh.Text = "     刷新文件";
             this.tsmiRefresh.Click += new System.EventHandler(this.tsmiRefresh_Click);
             // 
@@ -133,6 +133,7 @@
             this.txtSearch.TabIndex = 1;
             this.txtSearch.Text = "  请输入需要启动文件的关键字...";
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.DoubleClick += new System.EventHandler(this.txtSearch_DoubleClick);
             this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
             // 
             // btnOK
