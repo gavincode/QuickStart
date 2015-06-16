@@ -312,6 +312,11 @@ namespace QuickStartUI
             OpenFile(Directory.GetParent(selectedFile).FullName);
         }
 
+        private void txtSearch_DoubleClick(object sender, EventArgs e)
+        {
+            InitText();
+        }
+
         #endregion
 
         #region 私有方法
@@ -444,10 +449,5 @@ namespace QuickStartUI
         }
 
         #endregion
-
-        private void txtSearch_DoubleClick(object sender, EventArgs e)
-        {
-            InitText();
-        }
     }
 }
