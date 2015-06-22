@@ -38,6 +38,7 @@ namespace QuickStartUI
             RegistHotKey();
             RefreshHistory();
             InitText();
+
         }
 
         private void BindHistoryData()
@@ -331,11 +332,13 @@ namespace QuickStartUI
             this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
 
             //dataGridView
-            this.dataGridView.Columns[0].FillWeight = 20;
-            this.dataGridView.Columns[1].Visible = false;
+            this.dataGridView.Columns[0].HeaderText = String.Empty;
+            this.dataGridView.Columns[0].FillWeight = 2;
+            this.dataGridView.Columns[1].FillWeight = 20;
             this.dataGridView.Columns[2].Visible = false;
-            this.dataGridView.Columns[3].FillWeight = 67;
-            this.dataGridView.Columns[4].FillWeight = 13;
+            this.dataGridView.Columns[3].Visible = false;
+            this.dataGridView.Columns[4].FillWeight = 65;
+            this.dataGridView.Columns[5].FillWeight = 13;
         }
 
         private List<FileInfos> Convert(IEnumerable<String> files)
@@ -349,6 +352,17 @@ namespace QuickStartUI
 
         private void ConvertTo(IEnumerable<String> files, List<FileInfos> fileInfos)
         {
+            //.sln文档的图标只能以主线程的身份读取
+            if (FileInfos.slnIcon == null)
+            {
+                var sln = files.FirstOrDefault(q => q.EndsWith(".sln"));
+                InvokeMethod(() =>
+                {
+                    if (sln == null) return;
+                    FileInfos.SetSlnIcon(new FileInfos(sln).Icon);
+                });
+            }
+
             foreach (var item in files)
             {
                 if (File.Exists(item) || Directory.Exists(item))

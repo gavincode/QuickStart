@@ -52,6 +52,8 @@
     <Compile Include="FileForeach\FileReader.cs" />
     <Compile Include="History\FileHistory.cs" />
     <Compile Include="HotKey\HotKeyHelper.cs" />
+    <Compile Include="Icon\IconHandler.cs" />
+    <Compile Include="Icon\SlnIcon.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
