@@ -48,16 +48,16 @@ namespace QuickStartUI
 
         private void BindHistoryData()
         {
-            ThreadPool.QueueUserWorkItem(p =>
-            {
-                //读取历史记录并保存到cachedFiles
-                ConvertTo(FileHistory.Read(), cachedFiles);
+            //ThreadPool.QueueUserWorkItem(p =>
+            //{
+            //    //读取历史记录并保存到cachedFiles
+            //    ConvertTo(FileHistory.Read(), cachedFiles);
 
-                InvokeMethod(() =>
-                {
-                    BindGridView(cachedFiles.OrderByDescending(q => q.Crdate));
-                });
-            });
+            //    InvokeMethod(() =>
+            //    {
+            //        BindGridView(cachedFiles.OrderByDescending(q => q.Crdate));
+            //    });
+            //});
         }
 
         private void RefreshHistory()
@@ -73,7 +73,7 @@ namespace QuickStartUI
                     cachedFiles = fileInfos;
                 }
 
-                FileHistory.Write(files);
+                //FileHistory.Write(files);
 
                 InvokeMethod(() => txtSearch_TextChanged(null, null));
             });
@@ -307,12 +307,12 @@ namespace QuickStartUI
 
             FileFilter.AddTypeIgnore(selectedFile);
 
-            RefreshHistory();
+            //RefreshHistory();
         }
 
         private void tsmiRefresh_Click(object sender, EventArgs e)
         {
-            RefreshHistory();
+            //RefreshHistory();
         }
 
         private void tsmiOpen_Click(object sender, EventArgs e)
