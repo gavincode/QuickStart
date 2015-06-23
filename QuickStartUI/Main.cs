@@ -18,6 +18,7 @@ namespace QuickStartUI
         #region 初始化
 
         private static readonly Object lockObj = new Object();
+        private static readonly Object lockInvoke = new Object();
 
         public static readonly String ShowHotKeys = "切换主界面:  [ESC] 或 [Alt + X]";
 
@@ -34,11 +35,15 @@ namespace QuickStartUI
         {
             InitializeComponent();
             Initializenotifyicon();
-            BindHistoryData();
-            RegistHotKey();
-            RefreshHistory();
-            InitText();
+        }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            BindHistoryData();
+            RefreshHistory();
+            RegistHotKey();
+            InitText();
+            base.OnLoad(e);
         }
 
         private void BindHistoryData()
@@ -68,9 +73,9 @@ namespace QuickStartUI
                     cachedFiles = fileInfos;
                 }
 
-                InvokeMethod(() => txtSearch_TextChanged(null, null));
-
                 FileHistory.Write(files);
+
+                InvokeMethod(() => txtSearch_TextChanged(null, null));
             });
         }
 
@@ -175,6 +180,8 @@ namespace QuickStartUI
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
         {
+            e.Handled = true;
+
             if (e.Modifiers == Keys.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.D))
             {
                 tsmiOpen_Click(null, null);
@@ -214,7 +221,11 @@ namespace QuickStartUI
                 return;
             }
 
-            e.Handled = true;
+            if (this.txtSearch.Text.EndsWith(".."))
+            {
+                InitText();
+                return;
+            }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -227,8 +238,8 @@ namespace QuickStartUI
             }
             else
             {
-                BindGridView(cachedFiles.Where(p => p.LowerName.Contains(search) || p.NameLetters.Contains(search))
-                                        .OrderBy(p => p.NameLetters.Length)
+                BindGridView(cachedFiles.Where(p => p.GetLowerName().Contains(search) || p.GetNameLetters().Contains(search))
+                                        .OrderBy(p => p.GetNameLetters().Length)
                                         .ThenByDescending(p => p.Crdate));
             }
         }
@@ -333,12 +344,10 @@ namespace QuickStartUI
 
             //dataGridView
             this.dataGridView.Columns[0].HeaderText = String.Empty;
-            this.dataGridView.Columns[0].FillWeight = 2;
+            this.dataGridView.Columns[0].FillWeight = 3;
             this.dataGridView.Columns[1].FillWeight = 20;
-            this.dataGridView.Columns[2].Visible = false;
-            this.dataGridView.Columns[3].Visible = false;
-            this.dataGridView.Columns[4].FillWeight = 65;
-            this.dataGridView.Columns[5].FillWeight = 13;
+            this.dataGridView.Columns[2].FillWeight = 65;
+            this.dataGridView.Columns[3].FillWeight = 12;
         }
 
         private List<FileInfos> Convert(IEnumerable<String> files)
@@ -402,7 +411,10 @@ namespace QuickStartUI
 
         private void InvokeMethod(Action action)
         {
-            Invoke(action);
+            lock (lockInvoke)
+            {
+                Invoke(action);
+            }
         }
 
         private void MoveDown()

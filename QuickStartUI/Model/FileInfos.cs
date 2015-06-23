@@ -36,9 +36,18 @@ namespace QuickStartUI
 
         public Icon Icon { get; set; }
         public String Name { get; set; }
-        public String LowerName { get; set; }
-        public String NameLetters { get; set; }
+        private String LowerName { get; set; }
+        private String NameLetters { get; set; }
         public String FilePath { get; set; }
         public DateTime Crdate { get; set; }
+
+        public String GetLowerName()
+        {
+            return this.LowerName;
+        }
+        public String GetNameLetters()
+        {
+            return this.NameLetters;
+        }
     }
 }
