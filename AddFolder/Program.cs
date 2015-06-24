@@ -45,6 +45,12 @@ namespace AddFolder
             {
                 regQuickStart = regShell.CreateSubKey("quickstart");
             }
+            else
+            {
+                regShell.DeleteSubKeyTree("quickstart");
+                regShell.Close();
+                return null;
+            }
 
             RegistryKey regCommand = regQuickStart.OpenSubKey("command", true);
             if (regCommand == null || regCommand.GetValue("").ToString() != exeFile)
