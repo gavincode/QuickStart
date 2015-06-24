@@ -31,7 +31,7 @@ namespace QuickStartUI
             if (Path.GetExtension(Name) == ".sln" && slnIcon != null)
                 Icon = slnIcon;
             else
-                Icon = IconHandler.GetFileIcon(file);
+                Icon = IconHandler.GetIcon(file);
         }
 
         public Icon Icon { get; set; }

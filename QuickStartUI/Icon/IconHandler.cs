@@ -13,8 +13,7 @@ namespace QuickStartUI
         static readonly uint m_uflagFile = (uint)(SHGFI.SHGFI_ICON | SHGFI.SHGFI_SMALLICON | SHGFI.SHGFI_USEFILEATTRIBUTES);
         static readonly uint m_uflagDirectory = (uint)(SHGFI.SHGFI_ICON | SHGFI.SHGFI_SMALLICON);
 
-        //static readonly Object lockObj = new Object();
-        static Icon m_FolderIcon = GetFileIcon("folder");
+        static Icon m_FolderIcon = null;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
@@ -53,30 +52,51 @@ namespace QuickStartUI
         /// </summary>  
         /// <param name="p_Path">文件全路径</param>  
         /// <returns>图标</returns>  
-        public static Icon GetFileIcon(string p_Path)
+        public static Icon GetIcon(string p_Path)
         {
-            if (String.IsNullOrEmpty(p_Path)) return null;
-
-            uint flag = m_uflagFile;
-
-            //文件夹
-            if (Path.GetExtension(p_Path) == "")
+            if (Directory.Exists(p_Path))
             {
-                if (m_FolderIcon != null) return m_FolderIcon;
+                if (m_FolderIcon == null) m_FolderIcon = GetDirectoryIcon();
 
-                p_Path = @"";
-                flag = m_uflagDirectory;
+                return m_FolderIcon;
             }
 
+            if (File.Exists(p_Path))
+            {
+                return GetFileIcon(p_Path);
+            }
+
+            return null;
+        }
+
+        /// <summary>  
+        /// 获取文件图标 
+        /// </summary>  
+        /// <param name="p_Path">文件全路径</param>  
+        /// <returns>图标</returns>  
+        public static Icon GetFileIcon(string p_Path)
+        {
             SHFILEINFO _SHFILEINFO = new SHFILEINFO();
 
-            IntPtr _IconIntPtr = SHGetFileInfo(p_Path, 0, ref _SHFILEINFO, (uint)Marshal.SizeOf(_SHFILEINFO), flag);
+            IntPtr _IconIntPtr = SHGetFileInfo(p_Path, 0, ref _SHFILEINFO, (uint)Marshal.SizeOf(_SHFILEINFO), m_uflagFile);
 
             if (_IconIntPtr.Equals(IntPtr.Zero) || _SHFILEINFO.hIcon.Equals(IntPtr.Zero)) return null;
 
-            Icon icon = System.Drawing.Icon.FromHandle(_SHFILEINFO.hIcon);
+            return Icon.FromHandle(_SHFILEINFO.hIcon);
+        }
+        /// <summary>  
+        /// 获取文件夹图标
+        /// </summary>  
+        /// <returns>图标</returns>  
+        public static Icon GetDirectoryIcon()
+        {
+            SHFILEINFO _SHFILEINFO = new SHFILEINFO();
 
-            return icon;
+            IntPtr _IconIntPtr = SHGetFileInfo(@"", 0, ref _SHFILEINFO, (uint)Marshal.SizeOf(_SHFILEINFO), m_uflagDirectory);
+
+            if (_IconIntPtr.Equals(IntPtr.Zero)) return null;
+
+            return Icon.FromHandle(_SHFILEINFO.hIcon);
         }
     }
 }

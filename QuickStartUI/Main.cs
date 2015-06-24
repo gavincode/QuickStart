@@ -312,7 +312,12 @@ namespace QuickStartUI
 
         private void tsmiRefresh_Click(object sender, EventArgs e)
         {
-            //RefreshHistory();
+            ThreadPool.QueueUserWorkItem(p =>
+            {
+                OpenFile(Assembly.GetExecutingAssembly().Location);
+            });
+
+            Application.Exit();
         }
 
         private void tsmiOpen_Click(object sender, EventArgs e)
