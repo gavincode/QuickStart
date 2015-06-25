@@ -168,7 +168,7 @@
             this.MinimizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "快速启动";
+            this.Text = "快速启动  文档扫描中,请稍候...";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.cmsGridView.ResumeLayout(false);
             this.ResumeLayout(false);
