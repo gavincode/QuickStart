@@ -279,11 +279,6 @@ namespace QuickStartUI
             this.Dispose(true);
         }
 
-        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            ChangeWindowState();
-        }
-
         private void tsmiIngoreFile_Click(object sender, EventArgs e)
         {
             var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
@@ -329,6 +324,14 @@ namespace QuickStartUI
         private void txtSearch_DoubleClick(object sender, EventArgs e)
         {
             InitText();
+        }
+
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                ChangeWindowState();
+            }
         }
 
         #endregion
