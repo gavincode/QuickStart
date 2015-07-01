@@ -183,30 +183,4 @@ namespace QuickStartUI
 
         #endregion
     }
-
-    /// <summary>
-    /// 文件过滤类型枚举
-    /// </summary>
-    public enum FileFilterTypeEnum
-    {
-        /// <summary>
-        /// 文件夹
-        /// </summary>
-        FolderFilter,
-
-        /// <summary>
-        /// 文件类型
-        /// </summary>
-        FileTypeFilter,
-
-        /// <summary>
-        /// 文件
-        /// </summary>
-        FileFilter,
-
-        /// <summary>
-        /// 文件关键字
-        /// </summary>
-        FileKeyWordFilter
-    }
 }

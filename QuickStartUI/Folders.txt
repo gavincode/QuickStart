@@ -8,10 +8,9 @@ C:\Users\moqikaka\Documents\Visual Studio 2013\Code Snippets\Visual C#\My Code S
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk
 C:\Users\Public\Desktop
-E:\Projects\谢飞20150526
-C:\Users\moqikaka
 D:\开发文档\Excels
 D:\工作文档
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha\WebSite
 D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha\WebSite\Log
-C:\Users\Administrator\Desktop
+E:\Release
+E:\git\github

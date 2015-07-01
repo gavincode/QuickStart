@@ -30,31 +30,11 @@ namespace QuickStartUI
 
         public Main()
         {
+            RefreshHistory();
             InitializeComponent();
             Initializenotifyicon();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            BindHistoryData();
-            RefreshHistory();
-            RegistHotKey();
             InitText();
-            base.OnLoad(e);
-        }
-
-        private void BindHistoryData()
-        {
-            //ThreadPool.QueueUserWorkItem(p =>
-            //{
-            //    //读取历史记录并保存到cachedFiles
-            //    ConvertTo(FileHistory.Read(), cachedFiles);
-
-            //    InvokeMethod(() =>
-            //    {
-            //        BindGridView(cachedFiles.OrderByDescending(q => q.Crdate));
-            //    });
-            //});
+            RegistHotKey();
         }
 
         private void RefreshHistory()
@@ -69,8 +49,6 @@ namespace QuickStartUI
                 {
                     cachedFiles = fileInfos;
                 }
-
-                //FileHistory.Write(files);
 
                 InvokeMethod(() => txtSearch_TextChanged(null, null));
             });
@@ -379,8 +357,8 @@ namespace QuickStartUI
 
             foreach (var item in files)
             {
-                if (File.Exists(item) || Directory.Exists(item))
-                    fileInfos.Add(new FileInfos(item));
+                //if (File.Exists(item) || Directory.Exists(item))
+                fileInfos.Add(new FileInfos(item));
             }
         }
 
