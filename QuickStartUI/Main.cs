@@ -30,11 +30,22 @@ namespace QuickStartUI
 
         public Main()
         {
-            RefreshHistory();
             InitializeComponent();
             Initializenotifyicon();
             InitText();
             RegistHotKey();
+            LoadHistory();
+        }
+
+        private void LoadHistory()
+        {
+            var files = FileHistory.Read();
+
+            cachedFiles = Convert(files);
+
+            BindGridView(cachedFiles);
+
+            RefreshHistory();
         }
 
         private void RefreshHistory()
@@ -49,6 +60,8 @@ namespace QuickStartUI
                 {
                     cachedFiles = fileInfos;
                 }
+
+                FileHistory.Write(files.Where(q => q.EndsWith(".lnk")));
 
                 InvokeMethod(() => txtSearch_TextChanged(null, null));
             });
