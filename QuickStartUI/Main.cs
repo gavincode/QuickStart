@@ -34,6 +34,7 @@ namespace QuickStartUI
             Initializenotifyicon();
             InitText();
             RegistHotKey();
+            RefreshHistory();
             LoadHistory();
         }
 
@@ -43,9 +44,7 @@ namespace QuickStartUI
 
             cachedFiles = Convert(files);
 
-            BindGridView(cachedFiles);
-
-            RefreshHistory();
+            BindGridView(cachedFiles, false);
         }
 
         private void RefreshHistory()
@@ -61,9 +60,9 @@ namespace QuickStartUI
                     cachedFiles = fileInfos;
                 }
 
-                FileHistory.Write(files.Where(q => q.EndsWith(".lnk")));
-
                 InvokeMethod(() => txtSearch_TextChanged(null, null));
+
+                FileHistory.Write(files.Where(q => q.EndsWith(".lnk")));
             });
         }
 
@@ -329,14 +328,15 @@ namespace QuickStartUI
 
         #region 私有方法
 
-        private void BindGridView(IEnumerable<FileInfos> dataSource)
+        private void BindGridView(IEnumerable<FileInfos> dataSource, Boolean changeText = true)
         {
             lock (lockObj)
             {
                 this.dataGridView.DataSource = dataSource.ToList();
             }
 
-            this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
+            if (changeText)
+                this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
 
             //dataGridView
             this.dataGridView.Columns[0].HeaderText = String.Empty;
