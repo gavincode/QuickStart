@@ -243,14 +243,7 @@ namespace QuickStartUI
 
             var filePath = this.dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
 
-            if (OpenFile(filePath))
-            {
-                ChangeWindowState();
-            }
-            else
-            {
-                MessageBox.Show("[启动失败]该文件已被删除或已失效!", "提示", MessageBoxButtons.OK);
-            }
+            OpenFile(filePath);
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -393,6 +386,8 @@ namespace QuickStartUI
                     try
                     {
                         Process.Start(path);
+
+                        InvokeMethod(() => ChangeWindowState());
                     }
                     catch (Exception)
                     {
