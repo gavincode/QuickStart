@@ -381,19 +381,17 @@ namespace QuickStartUI
 
             if (File.Exists(path) || Directory.Exists(path))
             {
-                ThreadPool.QueueUserWorkItem(p =>
+                try
                 {
-                    try
-                    {
-                        Process.Start(path);
+                    Process.Start(path);
 
-                        InvokeMethod(() => ChangeWindowState());
-                    }
-                    catch (Exception)
-                    {
-                        InvokeMethod(() => MessageBox.Show("[启动失败]该文件已被删除或已失效!", "提示", MessageBoxButtons.OK));
-                    }
-                });
+                    ChangeWindowState();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("[启动失败]该文件已被删除或已失效!", "提示", MessageBoxButtons.OK);
+                }
+
                 opened = true;
             }
 
@@ -404,7 +402,8 @@ namespace QuickStartUI
         {
             lock (lockInvoke)
             {
-                Invoke(action);
+                BeginInvoke(action);
+                //Invoke(action);
             }
         }
 
