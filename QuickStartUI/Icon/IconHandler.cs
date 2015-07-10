@@ -81,6 +81,7 @@ namespace QuickStartUI
 
             return Icon.FromHandle(_SHFILEINFO.hIcon);
         }
+
         /// <summary>  
         /// 获取文件夹图标
         /// </summary>  
@@ -91,7 +92,7 @@ namespace QuickStartUI
 
             IntPtr _IconIntPtr = SHGetFileInfo(@"", 0, ref _SHFILEINFO, (uint)Marshal.SizeOf(_SHFILEINFO), m_uflagDirectory);
 
-            if (_IconIntPtr.Equals(IntPtr.Zero)) return null;
+            if (_IconIntPtr.Equals(IntPtr.Zero) || _SHFILEINFO.hIcon.Equals(IntPtr.Zero)) return null;
 
             return Icon.FromHandle(_SHFILEINFO.hIcon);
         }

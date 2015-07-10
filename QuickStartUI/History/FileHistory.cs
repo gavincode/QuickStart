@@ -14,7 +14,7 @@ namespace QuickStartUI
         {
             if (!File.Exists(file))
             {
-                File.CreateText(file);
+                File.CreateText(file).Close();
             }
         }
 

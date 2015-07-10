@@ -100,9 +100,6 @@
     <Content Include="Folders.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="history.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="search.ico" />
   </ItemGroup>
   <ItemGroup>
