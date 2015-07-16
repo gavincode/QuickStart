@@ -17,20 +17,30 @@ namespace QuickStartUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            //防止多次执行   
+            if (OpenedMoreThanOnce())
+            {
+                MessageBox.Show("程序正在在运行!   " + Constant.ShowHotKeys, "提示", MessageBoxButtons.OK);
+                return;
+            }
+
+            Application.Run(new Main());
+        }
+
+        private static Boolean OpenedMoreThanOnce()
+        {
+            return GetSameProcess().Length >= 1;
+        }
+
+        private static Process[] GetSameProcess()
+        {
             Process current = Process.GetCurrentProcess();
 
-            Process[] processes = Process.GetProcessesByName(Assembly.GetExecutingAssembly().GetName().Name);
-            processes = processes.Where(p => p.Id != current.Id).ToArray();
+            var assembleName = Assembly.GetExecutingAssembly().GetName().Name;
 
-            //防止多次执行   
-            if (processes.Length >= 1)
-            {
-                MessageBox.Show("程序正在在运行!   " + QuickStartUI.Main.ShowHotKeys, "提示", MessageBoxButtons.OK);
-            }
-            else
-            {
-                Application.Run(new Main());
-            }
+            Process[] processes = Process.GetProcessesByName(assembleName);
+
+            return processes.Where(p => p.Id != current.Id).ToArray();
         }
     }
 }

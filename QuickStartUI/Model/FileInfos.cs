@@ -18,14 +18,14 @@ namespace QuickStartUI
         {
             Name = Path.GetFileName(file);
             if (String.IsNullOrEmpty(Name)) Name = file;
-            if (Path.GetExtension(file) == ".lnk") Name = Path.GetFileNameWithoutExtension(file);
+            if (Path.GetExtension(file) == Constant.LinkExtension) Name = Path.GetFileNameWithoutExtension(file);
 
             LowerName = Name.ToLower();
             NameLetters = ChineseToLetter.ToLetters(Path.GetFileNameWithoutExtension(LowerName));
             FilePath = file;
             Crdate = File.GetLastAccessTime(file);
 
-            if (Path.GetExtension(Name) == ".sln" && slnIcon != null)
+            if (Path.GetExtension(Name) == Constant.SlnExtension && slnIcon != null)
                 Icon = slnIcon;
             else
                 Icon = IconHandler.GetIcon(file);

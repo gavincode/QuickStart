@@ -27,22 +27,22 @@ namespace QuickStartUI
         /// <summary>
         /// 文件过滤
         /// </summary>
-        public static List<String> fileFilter { get; set; }
+        public static HashSet<String> fileFilter { get; set; }
 
         /// <summary>
         /// 文件类型过滤
         /// </summary>
-        public static List<String> fileTypeFilter { get; set; }
+        public static HashSet<String> fileTypeFilter { get; set; }
 
         /// <summary>
         /// 文件夹过滤
         /// </summary>
-        public static List<String> folderFilter { get; set; }
+        public static HashSet<String> folderFilter { get; set; }
 
         /// <summary>
         /// 文件名关键字过滤
         /// </summary>
-        public static List<String> fileKeyWordFilter { get; set; }
+        public static HashSet<String> fileKeyWordFilter { get; set; }
 
         //过滤文件夹名
         public static String fnFilterFolder { get; set; }
@@ -90,10 +90,10 @@ namespace QuickStartUI
             if (!File.Exists(fnFolderText)) File.Create(fnFolderText).Close();
 
             //读取过滤数据
-            fileFilter = File.ReadAllLines(fnFileText).ToList();
-            fileKeyWordFilter = File.ReadAllLines(fnFileKeyWordText).ToList();
-            fileTypeFilter = File.ReadAllLines(fnFileTypeText).ToList();
-            folderFilter = File.ReadAllLines(fnFolderText).ToList();
+            fileFilter = new HashSet<String>(File.ReadAllLines(fnFileText));
+            fileKeyWordFilter = new HashSet<String>(File.ReadAllLines(fnFileKeyWordText));
+            fileTypeFilter = new HashSet<String>(File.ReadAllLines(fnFileTypeText));
+            folderFilter = new HashSet<String>(File.ReadAllLines(fnFolderText));
         }
 
         /// <summary>
@@ -129,22 +129,21 @@ namespace QuickStartUI
         /// </summary>
         /// <param name="currentPath">当前路径</param>
         /// <param name="fileList">存放文件的集合</param>
+        /// <param name="currentlayer">已遍历目录层次</param>
         /// <returns>文件集合</returns>
-        private static void GetAllFiles(String currentPath, ref List<String> fileList, Int32 maxLayer = 1)
+        private static void GetAllFiles(String currentPath, ref List<String> fileList, Int32 currentlayer = 1)
         {
-            if (maxLayer > MaxLayers) return;
-
-            //获取当前路径的文件夹名称
-            String fileName = Path.GetFileName(currentPath);
+            if (currentlayer > MaxLayers)
+            {
+                fileList.Add(currentPath);
+                return;
+            }
 
             //排除指定文件夹
-            if (folderFilter.Contains(fileName)) return;
+            if (folderFilter.Contains(Path.GetFileName(currentPath))) return;
 
             //已访问过
             if (fnFolders.Contains(currentPath)) return;
-
-            //无访问权限
-            //if (Directory.GetAccessControl(currentPath).AreAccessRulesProtected) return;
 
             //添加文件路径
             fileList.Add(currentPath);
@@ -169,7 +168,7 @@ namespace QuickStartUI
 
             foreach (string dir in Directory.GetDirectories(currentPath))
             {
-                GetAllFiles(dir, ref fileList, maxLayer + 1);
+                GetAllFiles(dir, ref fileList, currentlayer + 1);
             }
         }
 

@@ -14,19 +14,11 @@ namespace QuickStartUI
     {
         #region 初始化
 
+        //缓存列表读取锁
         private static readonly Object lockObj = new Object();
-        private static readonly Object lockInvoke = new Object();
-
-        public static readonly String ShowHotKeys = "切换主界面:  [ESC] 或 [Alt + X]";
 
         //缓存文件列表
         private static List<FileInfos> cachedFiles = new List<FileInfos>();
-
-        //快捷键Id常量
-        const Int32 hotKeyA = 987654;
-        const Int32 hotKeyB = 456789;
-        const Int32 hotKeyC = 756485;
-        const Int32 hotKeyD = 865749;
 
         public Main()
         {
@@ -49,21 +41,26 @@ namespace QuickStartUI
 
         private void RefreshHistory()
         {
-            ThreadPool.QueueUserWorkItem(p =>
+            StartNewTast(() =>
             {
                 var files = FileReader.ReadFiles();
 
                 var fileInfos = Convert(files);
 
-                lock (lockObj)
-                {
-                    cachedFiles = fileInfos;
-                }
+                SyncFiles(fileInfos);
 
-                InvokeMethod(() => txtSearch_TextChanged(null, null));
-
-                FileHistory.Write(files.Where(q => q.EndsWith(".lnk")));
+                FileHistory.Write(files.Where(q => q.EndsWith(Constant.LinkExtension)));
             });
+        }
+
+        private void SyncFiles(List<FileInfos> fileInfos)
+        {
+            lock (lockObj)
+            {
+                cachedFiles = fileInfos;
+            }
+
+            InvokeMethod(() => txtSearch_TextChanged(null, null));
         }
 
         private void InitText()
@@ -106,14 +103,14 @@ namespace QuickStartUI
                 case WM_HOTKEY:
                     switch (msg.WParam.ToInt32())
                     {
-                        case hotKeyA:
-                        case hotKeyD:
+                        case Constant.hotKeyAltX:
+                        case Constant.hotKeyEscape:
                             ChangeWindowState();
                             break;
-                        case hotKeyB:
+                        case Constant.hotKeyAltO:
                             OpenFile(Environment.CurrentDirectory);
                             break;
-                        case hotKeyC:
+                        case Constant.hotKeyAltE:
                             this.notifyIcon.Visible = false;
                             Application.Exit();
                             break;
@@ -129,28 +126,21 @@ namespace QuickStartUI
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (e.Delta < 0)
-            {
                 MoveDown();
-            }
             else
-            {
                 MoveUp();
-            }
 
             base.OnMouseWheel(e);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            ChangeWindowState();
-            e.Cancel = true;
+
 #if DEBUG
-            e.Cancel = false;
+            e.Cancel = true;
 #endif
-            if (!e.Cancel)
-            {
-                UnRegistHotKey();
-            }
+
+            ChangeWindowState();
 
             base.OnClosing(e);
         }
@@ -190,14 +180,12 @@ namespace QuickStartUI
 
             if (e.KeyCode == Keys.Up)
             {
-                e.Handled = true;
                 MoveUp();
                 return;
             }
 
             if (e.KeyCode == Keys.Down)
             {
-                e.Handled = true;
                 MoveDown();
                 return;
             }
@@ -219,7 +207,7 @@ namespace QuickStartUI
         {
             String search = txtSearch.Text.Trim().ToLower();
 
-            if (String.IsNullOrEmpty(search) || search.StartsWith("请输入需要启动文件的关键字"))
+            if (String.IsNullOrEmpty(search) || search.EndsWith(".."))
             {
                 BindGridView(cachedFiles.OrderByDescending(q => q.Crdate));
             }
@@ -239,11 +227,7 @@ namespace QuickStartUI
 
         private void dataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (this.dataGridView.CurrentRow == null) return;
-
-            var filePath = this.dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
-
-            OpenFile(filePath);
+            OpenFile(GetCurrentPath());
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -264,7 +248,7 @@ namespace QuickStartUI
 
         private void tsmiIngoreFile_Click(object sender, EventArgs e)
         {
-            var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
+            var selectedFile = GetCurrentPath();
 
             lock (lockObj)
             {
@@ -278,16 +262,12 @@ namespace QuickStartUI
 
         private void tsmiIgnoreType_Click(object sender, EventArgs e)
         {
-            var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
-
-            FileFilter.AddTypeIgnore(selectedFile);
-
-            //RefreshHistory();
+            FileFilter.AddTypeIgnore(GetCurrentPath());
         }
 
         private void tsmiRefresh_Click(object sender, EventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(p =>
+            StartNewTast(() =>
             {
                 OpenFile(Assembly.GetExecutingAssembly().Location);
             });
@@ -297,7 +277,7 @@ namespace QuickStartUI
 
         private void tsmiOpen_Click(object sender, EventArgs e)
         {
-            var selectedFile = dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
+            var selectedFile = GetCurrentPath();
 
             if (Directory.GetParent(selectedFile) == null) return;
 
@@ -329,7 +309,7 @@ namespace QuickStartUI
             }
 
             if (changeText)
-                this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
+                this.Text = "快速启动 - Total: " + dataSource.Count() + "         快捷键-  " + Constant.ShowHotKeys + "   关闭:[Alt + E]   刷新:[Alt + R]   打开目录:[Alt + O]";
 
             //dataGridView
             this.dataGridView.Columns[0].HeaderText = String.Empty;
@@ -350,21 +330,26 @@ namespace QuickStartUI
 
         private void ConvertTo(IEnumerable<String> files, List<FileInfos> fileInfos)
         {
-            //.sln文档的图标只能以主线程的身份读取
-            if (FileInfos.slnIcon == null)
-            {
-                var sln = files.FirstOrDefault(q => q.EndsWith(".sln"));
-                InvokeMethod(() =>
-                {
-                    if (sln == null) return;
-                    FileInfos.SetSlnIcon(new FileInfos(sln).Icon);
-                });
-            }
+            LoadSlnIconSync(files);
 
             foreach (var item in files)
             {
-                //if (File.Exists(item) || Directory.Exists(item))
                 fileInfos.Add(new FileInfos(item));
+            }
+        }
+
+        private void LoadSlnIconSync(IEnumerable<String> files)
+        {
+            //.sln文档的图标只能以主线程的身份读取
+            if (FileInfos.slnIcon == null)
+            {
+                var sln = files.FirstOrDefault(q => q.EndsWith(Constant.SlnExtension));
+                if (sln == null) return;
+
+                InvokeMethod(() =>
+                {
+                    FileInfos.SetSlnIcon(new FileInfos(sln).Icon);
+                });
             }
         }
 
@@ -375,58 +360,54 @@ namespace QuickStartUI
             return this.dataGridView.CurrentRow.Cells["FilePath"].Value.ToString();
         }
 
-        private Boolean OpenFile(String path)
+        private void OpenFile(String path)
         {
-            Boolean opened = false;
-
-            if (File.Exists(path) || Directory.Exists(path))
+            try
             {
-                try
-                {
-                    Process.Start(path);
+                Process.Start(path);
 
-                    ChangeWindowState();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("[启动失败]该文件已被删除或已失效!", "提示", MessageBoxButtons.OK);
-                }
-
-                opened = true;
+                ChangeWindowState();
             }
-
-            return opened;
+            catch (Exception)
+            {
+                MessageBox.Show("[启动失败]该文件已被删除或已失效!", "提示", MessageBoxButtons.OK);
+            }
         }
 
         private void InvokeMethod(Action action)
         {
-            lock (lockInvoke)
-            {
-                BeginInvoke(action);
-                //Invoke(action);
-            }
+            BeginInvoke(action);
         }
 
-        private void MoveDown()
+        private void StartNewTast(Action action)
         {
-            if (this.dataGridView.CurrentRow == null) return;
-            Int32 index = this.dataGridView.CurrentRow.Index + 1;
-
-            if (index >= dataGridView.Rows.Count) return;
-
-            this.dataGridView.Rows[index].Selected = true;
-            this.dataGridView.CurrentCell = this.dataGridView.Rows[index].Cells[0];
+            ThreadPool.QueueUserWorkItem(p =>
+            {
+                action();
+            });
         }
 
         private void MoveUp()
         {
+            MoveRow(-1);
+        }
+
+        private void MoveDown()
+        {
+            MoveRow(1);
+        }
+
+        private void MoveRow(Int32 moveIndex)
+        {
             if (this.dataGridView.CurrentRow == null) return;
-            Int32 index = this.dataGridView.CurrentRow.Index - 1;
 
-            if (index < 0) return;
+            Int32 nextIndex = this.dataGridView.CurrentRow.Index + moveIndex;
 
-            this.dataGridView.Rows[index].Selected = true;
-            this.dataGridView.CurrentCell = this.dataGridView.Rows[index].Cells[0];
+            if (nextIndex >= dataGridView.Rows.Count || nextIndex < 0) return;
+
+            this.dataGridView.Rows[nextIndex].Selected = true;
+            this.dataGridView.CurrentCell = this.dataGridView.Rows[nextIndex].Cells[0];
+
         }
 
         private void ChangeWindowState()
@@ -440,28 +421,23 @@ namespace QuickStartUI
             this.ShowInTaskbar = !isNormal;
             this.notifyIcon.Visible = isNormal;
 
-            if (!isNormal)
-            {
-                this.Select();
-            }
-
             RegistHotKey();
         }
 
         private void RegistHotKey()
         {
-            HotKeyHelper.RegisterHotKey(this.Handle, hotKeyA, KeyModifiers.Alt, Keys.X);
-            HotKeyHelper.RegisterHotKey(this.Handle, hotKeyB, KeyModifiers.Alt, Keys.O);
-            HotKeyHelper.RegisterHotKey(this.Handle, hotKeyC, KeyModifiers.Alt, Keys.E);
-            HotKeyHelper.RegisterHotKey(this.Handle, hotKeyD, KeyModifiers.None, Keys.Escape);
+            HotKeyHelper.RegisterHotKey(this.Handle, Constant.hotKeyAltX, KeyModifiers.Alt, Keys.X);
+            HotKeyHelper.RegisterHotKey(this.Handle, Constant.hotKeyAltO, KeyModifiers.Alt, Keys.O);
+            HotKeyHelper.RegisterHotKey(this.Handle, Constant.hotKeyAltE, KeyModifiers.Alt, Keys.E);
+            HotKeyHelper.RegisterHotKey(this.Handle, Constant.hotKeyEscape, KeyModifiers.None, Keys.Escape);
         }
 
         private void UnRegistHotKey()
         {
-            HotKeyHelper.UnregisterHotKey(this.Handle, hotKeyA);
-            HotKeyHelper.UnregisterHotKey(this.Handle, hotKeyB);
-            HotKeyHelper.UnregisterHotKey(this.Handle, hotKeyC);
-            HotKeyHelper.UnregisterHotKey(this.Handle, hotKeyD);
+            HotKeyHelper.UnregisterHotKey(this.Handle, Constant.hotKeyAltX);
+            HotKeyHelper.UnregisterHotKey(this.Handle, Constant.hotKeyAltO);
+            HotKeyHelper.UnregisterHotKey(this.Handle, Constant.hotKeyAltE);
+            HotKeyHelper.UnregisterHotKey(this.Handle, Constant.hotKeyEscape);
         }
 
         #endregion
