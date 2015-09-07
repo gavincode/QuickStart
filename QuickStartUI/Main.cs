@@ -364,9 +364,9 @@ namespace QuickStartUI
         {
             try
             {
-                Process.Start(path);
-
                 ChangeWindowState();
+
+                Process.Start(path);
             }
             catch (Exception)
             {
