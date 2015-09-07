@@ -25,5 +25,6 @@ namespace QuickStartUI
 
         public static String LinkExtension = ".lnk";
         public static String SlnExtension = ".sln";
+        public static String ExeExtension = ".exe";
     }
 }

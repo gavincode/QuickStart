@@ -136,7 +136,7 @@ namespace QuickStartUI
         protected override void OnClosing(CancelEventArgs e)
         {
 
-#if DEBUG
+#if !DEBUG
             e.Cancel = true;
 #endif
 

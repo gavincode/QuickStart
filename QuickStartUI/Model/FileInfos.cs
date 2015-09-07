@@ -25,7 +25,7 @@ namespace QuickStartUI
             FilePath = file;
             Crdate = File.GetLastAccessTime(file);
 
-            if (Path.GetExtension(Name) == Constant.SlnExtension && slnIcon != null)
+            if (slnIcon != null && Path.GetExtension(Name) == Constant.SlnExtension)
                 Icon = slnIcon;
             else
                 Icon = IconHandler.GetIcon(file);

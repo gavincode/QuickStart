@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace QuickStartUI
 {
@@ -11,6 +12,7 @@ namespace QuickStartUI
         static readonly uint m_uflagDirectory = (uint)(SHGFI.SHGFI_ICON | SHGFI.SHGFI_SMALLICON);
 
         static Icon m_FolderIcon = null;
+        static Dictionary<String, Icon> CommonIcons = new Dictionary<String, Icon>();
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
@@ -51,6 +53,7 @@ namespace QuickStartUI
         /// <returns>图标</returns>  
         public static Icon GetIcon(string p_Path)
         {
+            //文件夹返回统一图标
             if (Directory.Exists(p_Path))
             {
                 if (m_FolderIcon == null) m_FolderIcon = GetDirectoryIcon();
@@ -58,12 +61,34 @@ namespace QuickStartUI
                 return m_FolderIcon;
             }
 
-            if (File.Exists(p_Path))
+            //文件不存在返回null
+            if (!File.Exists(p_Path)) return null;
+
+            return CachedFileExtensionIcon(p_Path);
+        }
+
+        /// <summary>
+        /// 缓存文件扩展类型Icon
+        /// </summary>
+        /// <param name="p_Path">文件全路径</param>
+        /// <returns>文件扩展类型Icon</returns>
+        private static Icon CachedFileExtensionIcon(String p_Path)
+        {
+            var extension = Path.GetExtension(p_Path);
+
+            //.exe .lnk文件均单独获取
+            if (extension == Constant.LinkExtension || extension == Constant.ExeExtension)
             {
                 return GetFileIcon(p_Path);
             }
 
-            return null;
+            //其余类型文件缓存处理
+            if (!CommonIcons.ContainsKey(extension))
+            {
+                CommonIcons[extension] = GetFileIcon(p_Path);
+            }
+
+            return CommonIcons[extension];
         }
 
         /// <summary>  
