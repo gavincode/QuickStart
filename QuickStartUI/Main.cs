@@ -267,12 +267,7 @@ namespace QuickStartUI
 
         private void tsmiRefresh_Click(object sender, EventArgs e)
         {
-            StartNewTast(() =>
-            {
-                OpenFile(Assembly.GetExecutingAssembly().Location);
-            });
-
-            Application.Exit();
+            Application.Restart();
         }
 
         private void tsmiOpen_Click(object sender, EventArgs e)
