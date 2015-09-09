@@ -16,16 +16,18 @@ namespace QuickStartUI
 
         public FileInfos(String file)
         {
-            Name = Path.GetFileName(file);
+            FileInfo info = new FileInfo(file);
+
+            Name = info.Name;
             if (String.IsNullOrEmpty(Name)) Name = file;
-            if (Path.GetExtension(file) == Constant.LinkExtension) Name = Path.GetFileNameWithoutExtension(file);
+            if (info.Extension == Constant.LinkExtension) Name = Path.GetFileNameWithoutExtension(file);
 
             LowerName = Name.ToLower();
             NameLetters = ChineseToLetter.ToLetters(Path.GetFileNameWithoutExtension(LowerName));
             FilePath = file;
-            Crdate = File.GetLastAccessTime(file);
+            Crdate = info.LastAccessTime;
 
-            if (slnIcon != null && Path.GetExtension(Name) == Constant.SlnExtension)
+            if (slnIcon != null && info.Extension == Constant.SlnExtension)
                 Icon = slnIcon;
             else
                 Icon = IconHandler.GetIcon(file);
