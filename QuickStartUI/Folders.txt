@@ -1,15 +1,8 @@
-﻿D:\
-E:\
-C:\Users\moqikaka\Downloads
-D:\svn\MQGame_Server\Inuyasha\trunk\Design
-D:\svn\MQGame_Server\trunk
-D:\svn\MQGame_Server\Document
-C:\Users\moqikaka\Documents\Visual Studio 2013\Code Snippets\Visual C#\My Code Snippets
-D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha
-D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk
+﻿C:\Users\Administrator\我的文档\Downloads
+C:\Users\Administrator\Desktop
 C:\Users\Public\Desktop
-D:\开发文档\Excels
-D:\工作文档
-D:\svn\MQGame_Server\Inuyasha\trunk\Server\Trunk\Inuyasha\WebSite
-E:\Release
-E:\git\github
+F:\Projects
+D:\
+E:\
+F:\
+F:\git\github

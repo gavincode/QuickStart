@@ -18,7 +18,7 @@ namespace QuickStartUI
         private static readonly Object lockObj = new Object();
 
         //缓存文件列表
-        private static List<FileInfos> cachedFiles = new List<FileInfos>();
+        private static IEnumerable<FileInfos> cachedFiles = new List<FileInfos>();
 
         public Main()
         {
@@ -53,7 +53,7 @@ namespace QuickStartUI
             });
         }
 
-        private void SyncFiles(List<FileInfos> fileInfos)
+        private void SyncFiles(IEnumerable<FileInfos> fileInfos)
         {
             lock (lockObj)
             {
@@ -250,14 +250,9 @@ namespace QuickStartUI
         {
             var selectedFile = GetCurrentPath();
 
-            lock (lockObj)
-            {
-                cachedFiles.RemoveAll(p => p.FilePath == selectedFile);
-            }
-
-            txtSearch_TextChanged(null, null);
-
             FileFilter.AddFileIgnore(selectedFile);
+
+            RefreshHistory();
         }
 
         private void tsmiIgnoreType_Click(object sender, EventArgs e)
@@ -314,13 +309,13 @@ namespace QuickStartUI
             this.dataGridView.Columns[3].FillWeight = 12;
         }
 
-        private List<FileInfos> Convert(IEnumerable<String> files)
+        private IEnumerable<FileInfos> Convert(IEnumerable<String> files)
         {
             List<FileInfos> fileInfos = new List<FileInfos>();
 
             ConvertTo(files, fileInfos);
 
-            return fileInfos.OrderBy(p => p.Name).ToList();
+            return fileInfos.OrderBy(p => p.Name);
         }
 
         private void ConvertTo(IEnumerable<String> files, List<FileInfos> fileInfos)
