@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -104,7 +103,7 @@ namespace QuickStartUI
                     switch (msg.WParam.ToInt32())
                     {
                         case Constant.hotKeyAltX:
-                        case Constant.hotKeyEscape:
+                            //case Constant.hotKeyEscape:
                             ChangeWindowState();
                             break;
                         case Constant.hotKeyAltO:
